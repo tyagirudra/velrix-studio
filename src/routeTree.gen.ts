@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TestimonialsRouteImport } from './routes/testimonials'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
@@ -26,6 +27,11 @@ import { Route as PortfolioSlugRouteImport } from './routes/portfolio.$slug'
 const TestimonialsRoute = TestimonialsRouteImport.update({
   id: '/testimonials',
   path: '/testimonials',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRouteWithChildren
+  '/terms': typeof TermsRoute
   '/testimonials': typeof TestimonialsRoute
   '/portfolio/$slug': typeof PortfolioSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRouteWithChildren
+  '/terms': typeof TermsRoute
   '/testimonials': typeof TestimonialsRoute
   '/portfolio/$slug': typeof PortfolioSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRouteWithChildren
+  '/terms': typeof TermsRoute
   '/testimonials': typeof TestimonialsRoute
   '/portfolio/$slug': typeof PortfolioSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -148,6 +157,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/services'
+    | '/terms'
     | '/testimonials'
     | '/portfolio/$slug'
     | '/services/$slug'
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/services'
+    | '/terms'
     | '/testimonials'
     | '/portfolio/$slug'
     | '/services/$slug'
@@ -178,6 +189,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/services'
+    | '/terms'
     | '/testimonials'
     | '/portfolio/$slug'
     | '/services/$slug'
@@ -194,6 +206,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   ServicesRoute: typeof ServicesRouteWithChildren
+  TermsRoute: typeof TermsRoute
   TestimonialsRoute: typeof TestimonialsRoute
 }
 
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       path: '/testimonials'
       fullPath: '/testimonials'
       preLoaderRoute: typeof TestimonialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -328,6 +348,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   ServicesRoute: ServicesRouteWithChildren,
+  TermsRoute: TermsRoute,
   TestimonialsRoute: TestimonialsRoute,
 }
 export const routeTree = rootRouteImport
