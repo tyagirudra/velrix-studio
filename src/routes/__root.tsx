@@ -11,6 +11,10 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/Footer";
+import { SmoothScroll } from "../components/SmoothScroll";
+import { CursorGlow } from "../components/CursorGlow";
 
 function NotFoundComponent() {
   return (
