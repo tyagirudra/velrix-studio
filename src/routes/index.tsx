@@ -41,7 +41,7 @@ import {
   process,
   portfolio,
   testimonials,
-  webProjects,
+  portfolioData,
 } from "@/lib/site-data";
 
 export const Route = createFileRoute("/")({
@@ -392,9 +392,11 @@ function FeaturedWebProjectsSection() {
   const [filter, setFilter] = useState("All");
   const categories = ["All", "Business", "Healthcare", "Hospitality", "Beauty"];
 
+  const webDevProjects = portfolioData.filter(p => p.category === "Web Development" && p.previewImage && p.websiteUrl);
+  
   const filteredProjects = filter === "All" 
-    ? webProjects 
-    : webProjects.filter(p => p.category === filter);
+    ? webDevProjects 
+    : webDevProjects.filter(p => p.tags?.includes(filter));
 
   return (
     <section className="relative px-6 py-24">
@@ -449,7 +451,7 @@ function FeaturedWebProjectsSection() {
                     </div>
                     <div className="flex-1 mx-4 rounded-full bg-surface/60 px-3 py-1.5 text-xs text-muted-foreground flex items-center gap-2">
                       <span className="text-accent">🔒</span>
-                      <span className="truncate">{project.url.replace('https://', '')}</span>
+                      <span className="truncate">{project.websiteUrl.replace('https://', '')}</span>
                     </div>
                   </div>
                 </div>
@@ -457,7 +459,7 @@ function FeaturedWebProjectsSection() {
                 {/* Website Preview */}
                 <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-violet-600/20 via-indigo-500/20 to-cyan-500/20">
                   <img
-                    src={`https://image.thum.io/get/width/1200/height/750/${project.url}`}
+                    src={project.previewImage}
                     alt={project.title}
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
@@ -482,7 +484,7 @@ function FeaturedWebProjectsSection() {
                     {project.description}
                   </p>
                   <a
-                    href={project.url}
+                    href={project.websiteUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition-transform duration-300 hover:-translate-y-0.5"

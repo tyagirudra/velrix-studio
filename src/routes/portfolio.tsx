@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/Reveal";
 import { PageHero } from "@/components/sections";
-import { portfolio, type Category, webProjects, videographyProjects } from "@/lib/site-data";
+import { portfolioData, type Category } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Play, ArrowUpRight } from "lucide-react";
@@ -35,7 +35,7 @@ const filters: ("All" | Category)[] = [
   "SEO",
 ];
 
-function VideographyCard({ project, index }: { project: typeof videographyProjects[number]; index: number }) {
+function VideographyCard({ project, onClick }: { project: typeof portfolioData[number]; onClick: () => void }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -65,29 +65,35 @@ function VideographyCard({ project, index }: { project: typeof videographyProjec
   };
 
   return (
-    <Reveal key={project.title} delay={index % 2}>
-      <motion.div
-        className="group relative flex flex-col overflow-hidden rounded-[22px] border border-border/60 bg-[#18181B] transition-all duration-300"
+    <Reveal>
+      <div
+        onClick={onClick}
+        className="group relative flex flex-col overflow-hidden rounded-[22px] border border-border/60 bg-[#18181B] transition-all duration-300 cursor-pointer"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         whileHover={{ y: -8, boxShadow: "0 0 40px rgba(124, 58, 237, 0.2)" }}
       >
         <div className="relative aspect-[16/10] overflow-hidden">
-          <video
-            ref={videoRef}
-            src={project.video}
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            className="absolute inset-0 h-full w-full object-cover transition-opacity transition-transform duration-700"
-            style={{ transform: isPlaying ? "scale(1.02)" : "scale(1)" }}
-          />
+          {project.previewVideo && (
+            <video
+              ref={videoRef}
+              src={project.previewVideo}
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 h-full w-full object-cover transition-opacity transition-transform duration-700"
+              style={{ transform: isPlaying ? "scale(1.02)" : "scale(1)" }}
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-          <div
-            className="absolute top-4 right-4 rounded-full glass px-3 py-1 text-xs font-semibold">
-            {project.duration}
-          </div>
+          {project.duration && (
+            <div
+              className="absolute top-4 right-4 rounded-full glass px-3 py-1 text-xs font-semibold"
+            >
+              {project.duration}
+            </div>
+          )}
           <div className="absolute inset-0 flex items-center justify-center">
             <AnimatePresence>
               {!isPlaying && (
@@ -97,12 +103,12 @@ function VideographyCard({ project, index }: { project: typeof videographyProjec
                   className="relative"
                 >
                   {isLoading ? (
-                  <div className="w-20 h-20 rounded-full border-4 border-transparent border-t-purple-500 border-r-cyan-400 animate-spin" />
-                ) : (
-                  <div className="w-20 h-20 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-sm flex items-center justify-center shadow-lg shadow-purple-500/30">
-                    <Play className="w-8 h-8 text-white ml-1" />
-                  </div>
-                )}
+                    <div className="w-20 h-20 rounded-full border-4 border-transparent border-t-purple-500 border-r-cyan-400 animate-spin" />
+                  ) : (
+                    <div className="w-20 h-20 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-sm flex items-center justify-center shadow-lg shadow-purple-500/30">
+                      <Play className="w-8 h-8 text-white ml-1" />
+                    </div>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -110,10 +116,12 @@ function VideographyCard({ project, index }: { project: typeof videographyProjec
         </div>
         <div className="p-7">
           <div className="flex flex-wrap gap-2 mb-3">
-            <span className="inline-flex items-center rounded-full bg-gradient-brand-soft px-3 py-1 text-xs font-semibold text-accent">
-              {project.categoryLabel}
-            </span>
-            {project.features.map(feature => (
+            {project.categoryLabel && (
+              <span className="inline-flex items-center rounded-full bg-gradient-brand-soft px-3 py-1 text-xs font-semibold text-accent">
+                {project.categoryLabel}
+              </span>
+            )}
+            {project.features?.map(feature => (
               <span key={feature} className="inline-flex items-center rounded-full bg-surface/60 border border-border/40 px-2.5 py-1 text-[10px] font-medium text-muted-foreground">
                 {feature}
               </span>
@@ -124,12 +132,109 @@ function VideographyCard({ project, index }: { project: typeof videographyProjec
             {project.description}
           </p>
         </div>
-      </motion.div>
+      </div>
     </Reveal>
   );
 }
 
-function VideoModal({ project, onClose }: { project: typeof videographyProjects[number], onClose: () => void }) {
+function WebDevCard({ project }: { project: typeof portfolioData[number] }) {
+  return (
+    <Reveal>
+      <a
+        href={project.websiteUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group relative flex flex-col overflow-hidden rounded-[22px] border border-border/60 bg-[#18181B] transition-all duration-300 hover:-translate-y-2 hover:border-primary/50 hover:shadow-glow"
+      >
+        <div className="relative aspect-[16/10] overflow-hidden">
+          {project.previewImage && (
+            <img
+              src={project.previewImage}
+              alt={project.title}
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+          )}
+        </div>
+
+        <div className="p-7">
+          <div className="flex flex-wrap gap-2 mb-3">
+            {project.categoryLabel && (
+              <span className="inline-flex items-center rounded-full bg-gradient-brand-soft px-3 py-1 text-xs font-semibold text-accent">
+                {project.categoryLabel}
+              </span>
+            )}
+            {project.technologies?.map(tech => (
+              <span key={tech} className="inline-flex items-center rounded-full bg-surface/60 border border-border/40 px-2.5 py-1 text-[10px] font-medium text-muted-foreground">
+                {tech}
+              </span>
+            ))}
+          </div>
+          <h3 className="text-2xl font-bold">{project.title}</h3>
+          <p className="mt-3 text-muted-foreground text-sm leading-relaxed">
+            {project.description}
+          </p>
+          <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow">
+            Visit Live Website
+            <ArrowUpRight className="h-4 w-4" />
+          </span>
+        </div>
+      </a>
+    </Reveal>
+  );
+}
+
+function GenericCard({ project }: { project: typeof portfolioData[number] }) {
+  const cardGradients = [
+    "from-violet-500/30 to-cyan-500/30",
+    "from-fuchsia-500/30 to-violet-500/30",
+    "from-cyan-500/30 to-blue-500/30",
+  ];
+
+  return (
+    <Reveal>
+      <Link
+        to="/portfolio/$slug"
+        params={{ slug: project.slug || "project" }}
+        className="group block overflow-hidden rounded-3xl border border-border/60 bg-surface/40"
+      >
+        <div className={cn("relative aspect-[16/10] overflow-hidden bg-gradient-to-br", cardGradients[0])}>
+          <div className="absolute inset-0 grid place-items-center">
+            <span className="font-display text-4xl font-bold text-foreground/80 transition-transform duration-700 group-hover:scale-110">
+              {project.client || project.title}
+            </span>
+          </div>
+          <span className="absolute right-4 top-4 rounded-full glass px-3 py-1 text-xs font-medium">
+            {project.category}
+          </span>
+        </div>
+        <div className="flex items-center justify-between p-6">
+          <div>
+            <h2 className="text-lg font-semibold">{project.title}</h2>
+            <p className="text-sm text-muted-foreground">{project.description}</p>
+          </div>
+          {project.result && (
+            <span className="shrink-0 rounded-full bg-gradient-brand-soft px-3 py-1 text-xs font-semibold text-accent">
+              {project.result}
+            </span>
+          )}
+        </div>
+      </Link>
+    </Reveal>
+  );
+}
+
+function PortfolioCard({ project, onClick }: { project: typeof portfolioData[number]; onClick: () => void }) {
+  if (project.category === "Videography") {
+    return <VideographyCard project={project} onClick={onClick} />;
+  }
+  if (project.category === "Web Development" && project.previewImage) {
+    return <WebDevCard project={project} />;
+  }
+  return <GenericCard project={project} />;
+}
+
+function VideoModal({ project, onClose }: { project: typeof portfolioData[number]; onClose: () => void }) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -158,7 +263,9 @@ function VideoModal({ project, onClose }: { project: typeof videographyProjects[
           <X className="w-8 h-8" />
         </button>
         <div className="rounded-[22px] overflow-hidden shadow-2xl">
-          <video src={project.video} controls autoPlay className="w-full aspect-video" />
+          {project.previewVideo && (
+            <video src={project.previewVideo} controls autoPlay className="w-full aspect-video" />
+          )}
         </div>
       </motion.div>
     </motion.div>
@@ -167,16 +274,17 @@ function VideoModal({ project, onClose }: { project: typeof videographyProjects[
 
 function Portfolio() {
   const [active, setActive] = useState<(typeof filters)[number]>("All");
-  const [selectedVideo, setSelectedVideo] = useState<typeof videographyProjects[number] | null>(null);
-  let items;
-  let isVideography = active === "Videography";
-  if (isVideography) {
-    items = videographyProjects;
-  } else if (active === "All") {
-    items = webProjects;
-  } else {
-    items = webProjects.filter((p) => p.category === active);
-  }
+  const [selectedVideo, setSelectedVideo] = useState<typeof portfolioData[number] | null>(null);
+
+  const filteredItems = useMemo(() => {
+    let items = portfolioData.filter(p => p.isPublished);
+    if (active !== "All") {
+      items = items.filter(p => p.category === active);
+    }
+    return items.sort((a, b) => a.displayOrder - b.displayOrder);
+  }, [active]);
+
+  const isVideography = active === "Videography";
 
   return (
     <>
@@ -184,12 +292,12 @@ function Portfolio() {
         eyebrow="Selected work"
         title={
           <>
-            Featured {isVideography ? <span className="text-gradient">Videography</span> : <span className="text-gradient">Web Development</span>} Projects
+            Featured {isVideography ? <span className="text-gradient">Videography</span> : <span className="text-gradient">Portfolio</span>} Projects
           </>
         }
         subtitle={isVideography
           ? "Every frame tells a story. Explore cinematic productions crafted for brands, businesses and premium clients with exceptional visual storytelling and creative direction."
-          : "Explore some of our latest custom-built websites designed with modern technologies, premium UI/UX and performance-first architecture."
+          : "Explore our curated collection of work across web development, branding, photography, videography, marketing and SEO."
         }
       />
 
@@ -214,55 +322,18 @@ function Portfolio() {
 
       <section className="px-6 py-12">
         <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-2">
-          {items.length > 0 ? (
-            items.map((p, i) => {
-              if (isVideography) {
-                return (
-                  <div key={p.title} onClick={() => setSelectedVideo(p as typeof videographyProjects[number])}>
-                    <VideographyCard project={p as typeof videographyProjects[number]} index={i} />
-                  </div>
-                );
-              }
-              return (
-                <Reveal key={p.title} delay={i % 2}>
-                  <a
-                    href={(p as typeof webProjects[number]).url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative flex flex-col overflow-hidden rounded-[22px] border border-border/60 bg-[#18181B] transition-all duration-300 hover:-translate-y-2 hover:border-primary/50 hover:shadow-glow"
-                  >
-                    <div className="relative aspect-[16/10] overflow-hidden">
-                      <img
-                        src={(p as typeof webProjects[number]).image}
-                        alt={p.title}
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className="p-7">
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        <span className="inline-flex items-center rounded-full bg-gradient-brand-soft px-3 py-1 text-xs font-semibold text-accent">
-                          {p.categoryLabel}
-                        </span>
-                        {(p as typeof webProjects[number]).technologies?.map(tech => (
-                          <span key={tech} className="inline-flex items-center rounded-full bg-surface/60 border border-border/40 px-2.5 py-1 text-[10px] font-medium text-muted-foreground">
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                      <h3 className="text-2xl font-bold">{p.title}</h3>
-                      <p className="mt-3 text-muted-foreground text-sm leading-relaxed">
-                        {p.description}
-                      </p>
-                      <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow">
-                        Visit Live Website
-                        <ArrowUpRight className="h-4 w-4" />
-                      </span>
-                    </div>
-                  </a>
-                </Reveal>
-              );
-            })
+          {filteredItems.length > 0 ? (
+            filteredItems.map((project) => (
+              <PortfolioCard
+                key={project.id}
+                project={project}
+                onClick={() => {
+                  if (project.category === "Videography") {
+                    setSelectedVideo(project);
+                  }
+                }}
+              />
+            ))
           ) : (
             <div className="col-span-full text-center py-24">
               <p className="text-muted-foreground text-lg">Projects coming soon.</p>
