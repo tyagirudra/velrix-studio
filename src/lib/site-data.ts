@@ -229,7 +229,7 @@ export const videographyProjects = [
     category: "Videography" as const,
     description: "A cinematic brand film showcasing premium storytelling, creative direction and professional videography.",
     video: "/videography1.MP4",
-    duration: "02:35",
+    duration: "00:14",
     features: ["4K", "Cinematic", "Professional Editing", "Color Graded"],
   },
   {
@@ -238,7 +238,7 @@ export const videographyProjects = [
     category: "Videography" as const,
     description: "A premium commercial production highlighting cinematic visuals, creative editing and engaging storytelling.",
     video: "/videography2.mp4",
-    duration: "01:45",
+    duration: "00:19",
     features: ["4K", "Cinematic", "Color Graded", "Drone Shots"],
   },
 ] as const;
