@@ -46,46 +46,59 @@ function Pricing() {
       />
 
       <section className="px-6 py-12">
-        <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-4">
-          {pricing.map((tier, i) => (
-            <Reveal key={tier.name} delay={i % 4}>
-              <div
-                className={cn(
-                  "relative flex h-full flex-col rounded-3xl border p-7",
-                  tier.highlight
-                    ? "border-primary/50 bg-surface/60 shadow-glow"
-                    : "border-border/60 bg-surface/40",
-                )}
-              >
-                {tier.highlight && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-brand px-4 py-1 text-xs font-semibold text-primary-foreground">
-                    Recommended
-                  </span>
-                )}
-                <h2 className="text-lg font-semibold">{tier.name}</h2>
-                <p className="mt-3 text-4xl font-bold text-gradient">{tier.price}</p>
-                <p className="mt-2 text-sm text-muted-foreground">{tier.tagline}</p>
-                <ul className="mt-6 flex-1 space-y-3">
-                  {tier.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2.5 text-sm text-muted-foreground">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" /> {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  to="/contact"
+        <div className="mx-auto max-w-6xl">
+          <SectionHeading
+            eyebrow="Website Development"
+            title="Website Development Packages"
+            subtitle="Choose the perfect website development package for your business. Whether you're a startup, growing company, or enterprise, we have a solution tailored to your goals."
+          />
+
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            All prices are in Indian Rupees (INR). Taxes, domain, and hosting charges may vary based on project requirements.
+          </p>
+
+          <div className="mt-10 grid gap-6 lg:grid-cols-4">
+            {pricing.map((tier, i) => (
+              <Reveal key={tier.name} delay={i % 4}>
+                <div
                   className={cn(
-                    "mt-7 inline-flex justify-center rounded-full px-6 py-3 text-sm font-semibold transition-all",
+                    "relative flex h-full flex-col rounded-3xl border p-7",
                     tier.highlight
-                      ? "bg-gradient-brand text-primary-foreground shadow-glow"
-                      : "glass text-foreground hover:border-primary/50",
+                      ? "border-primary/50 bg-surface/60 shadow-glow"
+                      : "border-border/60 bg-surface/40",
                   )}
                 >
-                  Get started
-                </Link>
-              </div>
-            </Reveal>
-          ))}
+                  {tier.highlight && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-brand px-4 py-1 text-xs font-semibold text-primary-foreground">
+                      Recommended
+                    </span>
+                  )}
+                  <h2 className="text-lg font-semibold">{tier.name}</h2>
+                  <p className="mt-3 text-4xl font-bold text-gradient">{tier.price}</p>
+                  {tier.price !== "Custom" && <p className="mt-1 text-sm text-muted-foreground">Per Website</p>}
+                  <p className="mt-2 text-sm text-muted-foreground">{tier.tagline}</p>
+                  <ul className="mt-6 flex-1 space-y-3">
+                    {tier.features.map((f) => (
+                      <li key={f} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" /> {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    to="/contact"
+                    className={cn(
+                      "mt-7 inline-flex justify-center rounded-full px-6 py-3 text-sm font-semibold transition-all",
+                      tier.highlight
+                        ? "bg-gradient-brand text-primary-foreground shadow-glow"
+                        : "glass text-foreground hover:border-primary/50",
+                    )}
+                  >
+                    Get started
+                  </Link>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 

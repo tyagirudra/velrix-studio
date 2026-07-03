@@ -10,9 +10,12 @@ if (typeof window !== "undefined") {
 export function SmoothScroll() {
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 1.5,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
+      smoothTouch: false,
+      wheelMultiplier: 0.8,
+      touchMultiplier: 1.5,
     });
 
     lenis.on("scroll", ScrollTrigger.update);

@@ -4,17 +4,27 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
-import { Navbar } from "../components/Navbar";
+import PillNav from "../components/PillNav";
 import { Footer } from "../components/Footer";
 import { SmoothScroll } from "../components/SmoothScroll";
 import { CursorGlow } from "../components/CursorGlow";
+
+const navItems = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "Work", href: "/portfolio" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
+];
 
 function NotFoundComponent() {
   return (
@@ -42,9 +52,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -135,12 +142,24 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
     <QueryClientProvider client={queryClient}>
       <SmoothScroll />
       <CursorGlow />
-      <Navbar />
+      <PillNav
+        logo="/logo2.png"
+        logoAlt="Velrix Studio"
+        items={navItems}
+        activeHref={pathname}
+        className=""
+        baseColor="#6366f1"
+        pillColor="#ffffff"
+        hoveredPillTextColor="#ffffff"
+        pillTextColor="#000000"
+        initialLoadAnimation={true}
+      />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <main className="relative">
         <Outlet />

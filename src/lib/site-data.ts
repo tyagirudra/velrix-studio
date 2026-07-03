@@ -133,21 +133,21 @@ export const testimonials = [
 export const pricing = [
   {
     name: "Starter",
-    price: "$2,500",
+    price: "₹15,000",
     tagline: "For founders launching their first premium presence.",
     features: ["5-page custom website", "Mobile-first design", "Basic SEO setup", "Contact + lead form", "2 weeks delivery"],
     highlight: false,
   },
   {
     name: "Professional",
-    price: "$6,500",
+    price: "₹30,000",
     tagline: "For growing brands ready to convert seriously.",
     features: ["Up to 12 custom pages", "Brand & design system", "Advanced SEO + analytics", "CMS + blog", "Marketing automation", "Priority support"],
     highlight: true,
   },
   {
     name: "Business",
-    price: "$14,000",
+    price: "₹55,000",
     tagline: "For market leaders compounding their advantage.",
     features: ["Unlimited pages", "Full brand identity", "Technical + local SEO", "Photography & video", "CRO program", "Dedicated pod"],
     highlight: false,
@@ -162,9 +162,9 @@ export const pricing = [
 ] as const;
 
 export const maintenancePlans = [
-  { name: "Care", price: "$199/mo", body: "Updates, backups, uptime monitoring." },
-  { name: "Care+", price: "$499/mo", body: "Everything in Care plus monthly improvements & SEO." },
-  { name: "Growth", price: "$999/mo", body: "Care+ plus CRO experiments and content." },
+  { name: "Care", price: "₹19,999/mo", body: "Updates, backups, uptime monitoring." },
+  { name: "Care+", price: "₹49,999/mo", body: "Everything in Care plus monthly improvements & SEO." },
+  { name: "Growth", price: "₹99,999/mo", body: "Care+ plus CRO experiments and content." },
 ] as const;
 
 export const faqs = [
@@ -181,4 +181,43 @@ export const aiTools = [
   { title: "AI Content Generator", body: "On-brand copy drafts for pages, posts and ads." },
   { title: "AI Marketing Strategy", body: "A tailored growth playbook from a few inputs." },
   { title: "AI Landing Page Review", body: "Conversion critique with prioritised fixes." },
+] as const;
+
+export const webProjects = [
+  {
+    title: "Atlantis Grand Resort",
+    categoryLabel: "Luxury Resort Website",
+    category: "Web Development" as const,
+    description: "Luxury hospitality website with premium booking experience, immersive visuals and modern responsive design.",
+    technologies: ["Next.js", "React", "TailwindCSS"],
+    url: "https://atlantis-grand-reserve.vercel.app",
+    image: "/atlantis.png",
+  },
+  {
+    title: "Lumina",
+    categoryLabel: "Corporate Business Website",
+    category: "Web Development" as const,
+    description: "Modern corporate website focused on branding, lead generation and premium UI.",
+    technologies: ["Next.js", "React", "TailwindCSS"],
+    url: "https://lumina-alpha-ten.vercel.app",
+    image: "/lumina.png",
+  },
+  {
+    title: "Evoke Clinic",
+    categoryLabel: "Healthcare Website",
+    category: "Web Development" as const,
+    description: "Professional healthcare website designed for clinics with appointment booking and patient-focused experience.",
+    technologies: ["Next.js", "React", "TailwindCSS"],
+    url: "https://evoke-clinic-digital.vercel.app",
+    image: "/evoke.png",
+  },
+  {
+    title: "Lavish Looks Salon",
+    categoryLabel: "Luxury Salon Website",
+    category: "Web Development" as const,
+    description: "Premium beauty salon website showcasing services, appointments and luxury branding.",
+    technologies: ["Next.js", "React", "TailwindCSS"],
+    url: "https://lavish-looks-salon.vercel.app",
+    image: "/lavish looks.png",
+  },
 ] as const;

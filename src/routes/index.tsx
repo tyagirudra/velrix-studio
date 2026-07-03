@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -40,6 +41,7 @@ import {
   process,
   portfolio,
   testimonials,
+  webProjects,
 } from "@/lib/site-data";
 
 export const Route = createFileRoute("/")({
@@ -95,6 +97,8 @@ function Home() {
       <WhySection />
       <ProcessSection />
       <FeaturedWork />
+      <FeaturedWebProjectsSection />
+      <WebDevPricingSection />
       <TestimonialsSection />
       <CTASection />
     </>
@@ -384,6 +388,148 @@ function FeaturedWork() {
   );
 }
 
+function FeaturedWebProjectsSection() {
+  const [filter, setFilter] = useState("All");
+  const categories = ["All", "Business", "Healthcare", "Hospitality", "Beauty"];
+
+  const filteredProjects = filter === "All" 
+    ? webProjects 
+    : webProjects.filter(p => p.category === filter);
+
+  return (
+    <section className="relative px-6 py-24">
+      <BackgroundBlobs />
+      <div className="mx-auto max-w-6xl">
+        <Reveal>
+          <SectionHeading
+            eyebrow="Portfolio"
+            title="Featured Web Development Projects"
+            subtitle="Explore some of our recently developed websites designed with performance, responsiveness, modern UI/UX, and SEO best practices. Each project is custom-built to help businesses establish a powerful online presence and drive measurable growth."
+          />
+        </Reveal>
+
+        {/* Introduction */}
+        <Reveal delay={1}>
+          <p className="mt-6 text-center text-muted-foreground max-w-3xl mx-auto">
+            From luxury resorts and healthcare clinics to salons and corporate businesses, every project is designed with scalability, performance, and exceptional user experience in mind.
+          </p>
+        </Reveal>
+
+        {/* Filters */}
+        <Reveal delay={1.5}>
+          <div className="mt-10 flex flex-wrap justify-center gap-3">
+            {categories.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                  filter === cat
+                    ? "bg-gradient-brand text-primary-foreground shadow-glow"
+                    : "glass hover:border-primary/30"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </Reveal>
+
+        {/* Projects Grid */}
+        <div className="mt-14 grid gap-8 md:grid-cols-2">
+          {filteredProjects.map((project, index) => (
+            <Reveal key={project.title} delay={2 + (index % 2)}>
+              <div className="group relative flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-surface/40 transition-all duration-300 hover:-translate-y-2 hover:border-primary/50 hover:shadow-glow">
+                {/* Browser Mockup */}
+                <div className="relative bg-[#18181B] border-b border-border/40 px-4 py-3">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1.5">
+                      <div className="w-3 h-3 rounded-full bg-red-500/70" />
+                      <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
+                      <div className="w-3 h-3 rounded-full bg-green-500/70" />
+                    </div>
+                    <div className="flex-1 mx-4 rounded-full bg-surface/60 px-3 py-1.5 text-xs text-muted-foreground flex items-center gap-2">
+                      <span className="text-accent">🔒</span>
+                      <span className="truncate">{project.url.replace('https://', '')}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Website Preview */}
+                <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-violet-600/20 via-indigo-500/20 to-cyan-500/20">
+                  <img
+                    src={`https://image.thum.io/get/width/1200/height/750/${project.url}`}
+                    alt={project.title}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                </div>
+
+                {/* Card Content */}
+                <div className="p-7">
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <span className="inline-flex items-center rounded-full bg-gradient-brand-soft px-3 py-1 text-xs font-semibold text-accent">
+                      {project.categoryLabel}
+                    </span>
+                    {project.technologies.map(tech => (
+                      <span key={tech} className="inline-flex items-center rounded-full bg-surface/60 border border-border/40 px-2.5 py-1 text-[10px] font-medium text-muted-foreground">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <h3 className="text-2xl font-bold">{project.title}</h3>
+                  <p className="mt-3 text-muted-foreground text-sm leading-relaxed">
+                    {project.description}
+                  </p>
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition-transform duration-300 hover:-translate-y-0.5"
+                  >
+                    Visit Live Website
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* CTA Below Portfolio */}
+        <Reveal delay={4}>
+          <div className="mt-20 rounded-3xl border border-border/60 bg-surface/40 px-8 py-14 text-center">
+            <h3 className="text-3xl font-bold">Ready to Build Your Next Website?</h3>
+            <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+              Let's create a high-performance website tailored specifically to your business goals.
+            </p>
+            <div className="mt-10 flex flex-wrap justify-center gap-5">
+              <MagneticButton asChild>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow"
+                >
+                  Book Free Consultation
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </MagneticButton>
+              <MagneticButton asChild>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 rounded-full glass px-7 py-3.5 text-sm font-semibold"
+                >
+                  Get Custom Quote
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </MagneticButton>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 function TestimonialsSection() {
   return (
     <section className="px-6 py-24">
@@ -417,6 +563,33 @@ function TestimonialsSection() {
             </Reveal>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+function WebDevPricingSection() {
+  return (
+    <section className="relative px-6 py-24">
+      <BackgroundBlobs />
+      <div className="mx-auto max-w-6xl">
+        <Reveal>
+          <SectionHeading
+            eyebrow="Packages"
+            title="Website Development Packages"
+            subtitle="Choose the perfect package for your business. From startup websites to enterprise-grade solutions, we've got a plan tailored to your goals."
+          />
+        </Reveal>
+
+        <Reveal delay={1}>
+          <div className="mt-14 flex justify-center">
+            <img
+              src="/images/web-dev-pricing.png"
+              alt="Velrix Studio Website Development Pricing Packages"
+              className="w-full max-w-5xl rounded-3xl object-cover shadow-soft"
+            />
+          </div>
+        </Reveal>
       </div>
     </section>
   );
