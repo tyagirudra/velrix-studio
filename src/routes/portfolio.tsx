@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/Reveal";
-import { PageHero, CTASection } from "@/components/sections";
-import { portfolio, type Category, webProjects } from "@/lib/site-data";
+import { PageHero } from "@/components/sections";
+import { portfolio, type Category, webProjects, videographyProjects } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Play, ArrowUpRight } from "lucide-react";
 
 export const Route = createFileRoute("/portfolio")({
   head: () => ({
@@ -34,9 +35,148 @@ const filters: ("All" | Category)[] = [
   "SEO",
 ];
 
+function VideographyCard({ project, index }: { project: typeof videographyProjects[number]; index: number }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsPlaying(true);
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play().catch(() => {});
+      }
+    }, 250);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setIsLoading(false);
+    setIsPlaying(false);
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  };
+
+  return (
+    <Reveal key={project.title} delay={index % 2}>
+      <motion.div
+        className="group relative flex flex-col overflow-hidden rounded-[22px] border border-border/60 bg-[#18181B] transition-all duration-300"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        whileHover={{ y: -8, boxShadow: "0 0 40px rgba(124, 58, 237, 0.2)" }}
+      >
+        <div className="relative aspect-[16/10] overflow-hidden">
+          <video
+            ref={videoRef}
+            src={project.video}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 h-full w-full object-cover transition-opacity transition-transform duration-700"
+            style={{ transform: isPlaying ? "scale(1.02)" : "scale(1)" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+          <div
+            className="absolute top-4 right-4 rounded-full glass px-3 py-1 text-xs font-semibold">
+            {project.duration}
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <AnimatePresence>
+              {!isPlaying && (
+                <motion.div
+                  initial={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.7, opacity: 0 }}
+                  className="relative"
+                >
+                  {isLoading ? (
+                  <div className="w-20 h-20 rounded-full border-4 border-transparent border-t-purple-500 border-r-cyan-400 animate-spin" />
+                ) : (
+                  <div className="w-20 h-20 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-sm flex items-center justify-center shadow-lg shadow-purple-500/30">
+                    <Play className="w-8 h-8 text-white ml-1" />
+                  </div>
+                )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+        <div className="p-7">
+          <div className="flex flex-wrap gap-2 mb-3">
+            <span className="inline-flex items-center rounded-full bg-gradient-brand-soft px-3 py-1 text-xs font-semibold text-accent">
+              {project.categoryLabel}
+            </span>
+            {project.features.map(feature => (
+              <span key={feature} className="inline-flex items-center rounded-full bg-surface/60 border border-border/40 px-2.5 py-1 text-[10px] font-medium text-muted-foreground">
+                {feature}
+              </span>
+            ))}
+          </div>
+          <h3 className="text-2xl font-bold">{project.title}</h3>
+          <p className="mt-3 text-muted-foreground text-sm leading-relaxed">
+            {project.description}
+          </p>
+        </div>
+      </motion.div>
+    </Reveal>
+  );
+}
+
+function VideoModal({ project, onClose }: { project: typeof videographyProjects[number], onClose: () => void }) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-black/85 backdrop-blur-md" />
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-5xl"
+      >
+        <button onClick={onClose} className="absolute -top-12 right-0 text-white hover:opacity-80 hover:opacity-100 transition-opacity">
+          <X className="w-8 h-8" />
+        </button>
+        <div className="rounded-[22px] overflow-hidden shadow-2xl">
+          <video src={project.video} controls autoPlay className="w-full aspect-video" />
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 function Portfolio() {
   const [active, setActive] = useState<(typeof filters)[number]>("All");
-  const items = active === "All" ? webProjects : webProjects.filter((p) => p.category === active);
+  const [selectedVideo, setSelectedVideo] = useState<typeof videographyProjects[number] | null>(null);
+  let items;
+  let isVideography = active === "Videography";
+  if (isVideography) {
+    items = videographyProjects;
+  } else if (active === "All") {
+    items = webProjects;
+  } else {
+    items = webProjects.filter((p) => p.category === active);
+  }
 
   return (
     <>
@@ -44,10 +184,13 @@ function Portfolio() {
         eyebrow="Selected work"
         title={
           <>
-            Featured <span className="text-gradient">Web Development</span> Projects
+            Featured {isVideography ? <span className="text-gradient">Videography</span> : <span className="text-gradient">Web Development</span>} Projects
           </>
         }
-        subtitle="Explore some of our latest custom-built websites designed with modern technologies, premium UI/UX and performance-first architecture."
+        subtitle={isVideography
+          ? "Every frame tells a story. Explore cinematic productions crafted for brands, businesses and premium clients with exceptional visual storytelling and creative direction."
+          : "Explore some of our latest custom-built websites designed with modern technologies, premium UI/UX and performance-first architecture."
+        }
       />
 
       <section className="px-6 py-8">
@@ -72,48 +215,54 @@ function Portfolio() {
       <section className="px-6 py-12">
         <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-2">
           {items.length > 0 ? (
-            items.map((p, i) => (
-              <Reveal key={p.title} delay={i % 2}>
-                <a
-                  href={p.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative flex flex-col overflow-hidden rounded-[22px] border border-border/60 bg-[#18181B] transition-all duration-300 hover:-translate-y-2 hover:border-primary/50 hover:shadow-glow"
-                >
-                  <div className="relative aspect-[16/10] overflow-hidden">
-                    <img
-                      src={p.image}
-                      alt={p.title}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      loading="lazy"
-                    />
+            items.map((p, i) => {
+              if (isVideography) {
+                return (
+                  <div key={p.title} onClick={() => setSelectedVideo(p as typeof videographyProjects[number])}>
+                    <VideographyCard project={p as typeof videographyProjects[number]} index={i} />
                   </div>
-
-                  <div className="p-7">
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      <span className="inline-flex items-center rounded-full bg-gradient-brand-soft px-3 py-1 text-xs font-semibold text-accent">
-                        {p.categoryLabel}
-                      </span>
-                      {p.technologies.map(tech => (
-                        <span key={tech} className="inline-flex items-center rounded-full bg-surface/60 border border-border/40 px-2.5 py-1 text-[10px] font-medium text-muted-foreground">
-                          {tech}
-                        </span>
-                      ))}
+                );
+              }
+              return (
+                <Reveal key={p.title} delay={i % 2}>
+                  <a
+                    href={(p as typeof webProjects[number]).url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative flex flex-col overflow-hidden rounded-[22px] border border-border/60 bg-[#18181B] transition-all duration-300 hover:-translate-y-2 hover:border-primary/50 hover:shadow-glow"
+                  >
+                    <div className="relative aspect-[16/10] overflow-hidden">
+                      <img
+                        src={(p as typeof webProjects[number]).image}
+                        alt={p.title}
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                      />
                     </div>
-
-                    <h3 className="text-2xl font-bold">{p.title}</h3>
-                    <p className="mt-3 text-muted-foreground text-sm leading-relaxed">
-                      {p.description}
-                    </p>
-
-                    <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow">
-                      Visit Live Website
-                      <ArrowUpRight className="h-4 w-4" />
-                    </span>
-                  </div>
-                </a>
-              </Reveal>
-            ))
+                    <div className="p-7">
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        <span className="inline-flex items-center rounded-full bg-gradient-brand-soft px-3 py-1 text-xs font-semibold text-accent">
+                          {p.categoryLabel}
+                        </span>
+                        {(p as typeof webProjects[number]).technologies?.map(tech => (
+                          <span key={tech} className="inline-flex items-center rounded-full bg-surface/60 border border-border/40 px-2.5 py-1 text-[10px] font-medium text-muted-foreground">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                      <h3 className="text-2xl font-bold">{p.title}</h3>
+                      <p className="mt-3 text-muted-foreground text-sm leading-relaxed">
+                        {p.description}
+                      </p>
+                      <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow">
+                        Visit Live Website
+                        <ArrowUpRight className="h-4 w-4" />
+                      </span>
+                    </div>
+                  </a>
+                </Reveal>
+              );
+            })
           ) : (
             <div className="col-span-full text-center py-24">
               <p className="text-muted-foreground text-lg">Projects coming soon.</p>
@@ -124,26 +273,33 @@ function Portfolio() {
 
       <section className="px-6 py-16">
         <div className="mx-auto max-w-3xl rounded-[22px] border border-border/60 bg-surface/40 px-8 py-14 text-center">
-          <h3 className="text-3xl font-bold">Ready to Build Something Amazing?</h3>
+          <h3 className="text-3xl font-bold">{isVideography ? "Need a video that stands out?" : "Ready to Build Something Amazing?"}</h3>
           <p className="mt-4 text-muted-foreground">
-            Let's create a modern website that grows your business.
+            {isVideography
+              ? "Let's create cinematic content that elevates your brand, captivates your audience and drives real business results."
+              : "Let's create a modern website that grows your business."
+            }
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-5">
             <Link
               to="/contact"
               className="inline-flex items-center gap-2 rounded-full bg-gradient-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow"
             >
-              Book Free Consultation
+              {isVideography ? "Start Your Project" : "Book Free Consultation"}
             </Link>
             <Link
               to="/contact"
               className="inline-flex items-center gap-2 rounded-full glass px-7 py-3.5 text-sm font-semibold"
             >
-              Get Free Quote
+              {isVideography ? "Book Free Consultation" : "Get Free Quote"}
             </Link>
           </div>
         </div>
       </section>
+
+      <AnimatePresence>
+        {selectedVideo && <VideoModal project={selectedVideo} onClose={() => setSelectedVideo(null)} />}
+      </AnimatePresence>
     </>
   );
 }

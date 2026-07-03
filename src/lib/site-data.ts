@@ -221,3 +221,24 @@ export const webProjects = [
     image: "/lavish looks.png",
   },
 ] as const;
+
+export const videographyProjects = [
+  {
+    title: "Velrix Studio Showreel",
+    categoryLabel: "Commercial Film",
+    category: "Videography" as const,
+    description: "A cinematic brand film showcasing premium storytelling, creative direction and professional videography.",
+    video: "/videography1.MP4",
+    duration: "02:35",
+    features: ["4K", "Cinematic", "Professional Editing", "Color Graded"],
+  },
+  {
+    title: "Brand Commercial",
+    categoryLabel: "Promotional Film",
+    category: "Videography" as const,
+    description: "A premium commercial production highlighting cinematic visuals, creative editing and engaging storytelling.",
+    video: "/videography2.mp4",
+    duration: "01:45",
+    features: ["4K", "Cinematic", "Color Graded", "Drone Shots"],
+  },
+] as const;
