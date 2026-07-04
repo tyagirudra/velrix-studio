@@ -15,6 +15,7 @@ import PillNav from "../components/PillNav";
 import { Footer } from "../components/Footer";
 import { SmoothScroll } from "../components/SmoothScroll";
 import { CursorGlow } from "../components/CursorGlow";
+import TargetCursor from "../components/TargetCursor";
 import { mainNavItems } from "@/lib/navigation";
 
 // Convert mainNavItems to the format expected by PillNav
@@ -145,6 +146,14 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <SmoothScroll />
       <CursorGlow />
+      <TargetCursor
+        targetSelector="a, button, .cursor-target"
+        spinDuration={2}
+        hideDefaultCursor={true}
+        parallaxOn={true}
+        cursorColor="#ffffff"
+        cursorColorOnTarget="#8b5cf6"
+      />
       <PillNav
         logo="/logo2.png"
         logoAlt="Velrix Studio"

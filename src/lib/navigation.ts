@@ -17,7 +17,6 @@ export const footerNavItems = {
   services: [
     { to: "/services", label: "All Services" },
     { to: "/pricing", label: "Pricing" },
-    { to: "/testimonials", label: "Testimonials" },
   ],
   legal: [
     { to: "/privacy", label: "Privacy Policy" },
