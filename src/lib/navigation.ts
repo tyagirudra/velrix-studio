@@ -11,7 +11,6 @@ export const footerNavItems = {
   studio: [
     { to: "/about", label: "About" },
     { to: "/portfolio", label: "Portfolio" },
-    { to: "/case-studies", label: "Case Studies" },
     { to: "/careers", label: "Careers" },
   ],
   services: [
