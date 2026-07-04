@@ -15,16 +15,13 @@ import PillNav from "../components/PillNav";
 import { Footer } from "../components/Footer";
 import { SmoothScroll } from "../components/SmoothScroll";
 import { CursorGlow } from "../components/CursorGlow";
+import { mainNavItems } from "@/lib/navigation";
 
-const navItems = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Work", href: "/portfolio" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/contact" },
-];
+// Convert mainNavItems to the format expected by PillNav
+const navItems = mainNavItems.map(item => ({
+  label: item.label,
+  href: item.to,
+}));
 
 function NotFoundComponent() {
   return (

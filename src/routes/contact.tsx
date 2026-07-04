@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { Clock, MessageCircle, Mail, MapPin } from "lucide-react";
+import { MessageCircle, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { Reveal } from "@/components/Reveal";
 import { PageHero, FAQAccordion } from "@/components/sections";
@@ -115,41 +115,22 @@ function Contact() {
           </Reveal>
 
           <Reveal delay={1}>
-            <div className="flex h-full flex-col gap-5">
-              <div className="rounded-3xl border border-border/60 bg-surface/40 p-6">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-11 w-11 place-items-center rounded-xl glass text-accent"><Clock className="h-5 w-5" /></span>
-                  <h3 className="font-semibold">Business hours</h3>
+            <div className="flex h-full flex-col justify-center gap-6">
+              <a href="https://wa.me/10000000000" className="rounded-3xl border border-border/60 bg-surface/40 p-8 transition-colors hover:border-success/50">
+                <div className="flex items-center gap-4">
+                  <span className="grid h-14 w-14 place-items-center rounded-xl glass text-success"><MessageCircle className="h-7 w-7" /></span>
+                  <h3 className="text-lg font-semibold">WhatsApp us</h3>
                 </div>
-                <p className="mt-3 text-sm text-muted-foreground">Mon–Fri · 9:00 – 18:00<br />Weekend · By appointment</p>
-              </div>
-
-              <a href="https://wa.me/10000000000" className="rounded-3xl border border-border/60 bg-surface/40 p-6 transition-colors hover:border-success/50">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-11 w-11 place-items-center rounded-xl glass text-success"><MessageCircle className="h-5 w-5" /></span>
-                  <h3 className="font-semibold">WhatsApp us</h3>
-                </div>
-                <p className="mt-3 text-sm text-muted-foreground">Chat with a strategist in real time.</p>
+                <p className="mt-4 text-sm text-muted-foreground">Chat with a strategist in real time.</p>
               </a>
 
-              <a href="mailto:hello@velrix.studio" className="rounded-3xl border border-border/60 bg-surface/40 p-6 transition-colors hover:border-primary/50">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-11 w-11 place-items-center rounded-xl glass text-primary"><Mail className="h-5 w-5" /></span>
-                  <h3 className="font-semibold">Email</h3>
+              <a href="mailto:hello@velrix.studio" className="rounded-3xl border border-border/60 bg-surface/40 p-8 transition-colors hover:border-primary/50">
+                <div className="flex items-center gap-4">
+                  <span className="grid h-14 w-14 place-items-center rounded-xl glass text-primary"><Mail className="h-7 w-7" /></span>
+                  <h3 className="text-lg font-semibold">Email</h3>
                 </div>
-                <p className="mt-3 text-sm text-muted-foreground">hello@velrix.studio</p>
+                <p className="mt-4 text-sm text-muted-foreground">hello@velrix.studio</p>
               </a>
-
-              <div className="relative flex-1 overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-violet-500/20 to-cyan-500/20 p-6">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-11 w-11 place-items-center rounded-xl glass text-accent"><MapPin className="h-5 w-5" /></span>
-                  <h3 className="font-semibold">Visit us</h3>
-                </div>
-                <p className="mt-3 text-sm text-muted-foreground">Remote-first · Worldwide</p>
-                <div className="mt-4 grid h-32 place-items-center rounded-xl bg-background/40 text-xs text-muted-foreground">
-                  Map placeholder
-                </div>
-              </div>
             </div>
           </Reveal>
         </div>

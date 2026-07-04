@@ -1,11 +1,23 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/Reveal";
-import { PageHero } from "@/components/sections";
+import { PageHero, BackgroundBlobs, Eyebrow, SectionHeading } from "@/components/sections";
 import { portfolioData, type Category } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { X, Play, ArrowUpRight } from "lucide-react";
+
+const SweepEffect = () => (
+  <style>{`
+    @keyframes sweep {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(15deg); }
+      100% { transform: translateX(200%) translateY(200%) rotate(15deg); }
+    }
+    .animate-sweep {
+      animation: sweep 2s ease-in-out infinite;
+    }
+  `}</style>
+);
 
 export const Route = createFileRoute("/portfolio")({
   head: () => ({
@@ -66,7 +78,7 @@ function VideographyCard({ project, onClick }: { project: typeof portfolioData[n
 
   return (
     <Reveal>
-      <div
+      <motion.div
         onClick={onClick}
         className="group relative flex flex-col overflow-hidden rounded-[22px] border border-border/60 bg-[#18181B] transition-all duration-300 cursor-pointer"
         onMouseEnter={handleMouseEnter}
@@ -132,18 +144,22 @@ function VideographyCard({ project, onClick }: { project: typeof portfolioData[n
             {project.description}
           </p>
         </div>
-      </div>
+      </motion.div>
     </Reveal>
   );
 }
 
 function WebDevCard({ project }: { project: typeof portfolioData[number] }) {
+  const CardWrapper = project.websiteUrl ? "a" : "div";
+  
   return (
     <Reveal>
-      <a
-        href={project.websiteUrl}
-        target="_blank"
-        rel="noopener noreferrer"
+      <CardWrapper
+        {...(project.websiteUrl ? {
+          href: project.websiteUrl,
+          target: "_blank",
+          rel: "noopener noreferrer"
+        } : {})}
         className="group relative flex flex-col overflow-hidden rounded-[22px] border border-border/60 bg-[#18181B] transition-all duration-300 hover:-translate-y-2 hover:border-primary/50 hover:shadow-glow"
       >
         <div className="relative aspect-[16/10] overflow-hidden">
@@ -175,11 +191,69 @@ function WebDevCard({ project }: { project: typeof portfolioData[number] }) {
             {project.description}
           </p>
           <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow">
-            Visit Live Website
+            {project.websiteUrl ? "Visit Live Website" : "View Project"}
             <ArrowUpRight className="h-4 w-4" />
           </span>
         </div>
-      </a>
+      </CardWrapper>
+    </Reveal>
+  );
+}
+
+function PhotographyCard({ project }: { project: typeof portfolioData[number] }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x, { stiffness: 500, damping: 30 });
+  const mouseYSpring = useSpring(y, { stiffness: 500, damping: 30 });
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], [4, -4]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], [-4, 4]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <Reveal>
+      <motion.div
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#18181B]/80 backdrop-blur-md shadow-[0_0_40px_rgba(124,58,237,0.15)] transition-all duration-500 hover:-translate-y-3 hover:border-primary/30 hover:shadow-[0_0_80px_rgba(124,58,237,0.35)] will-change-transform"
+      >
+        <div className="relative overflow-hidden rounded-3xl p-4">
+          {project.previewImage && (
+            <motion.img
+              src={project.previewImage}
+              alt="Photography"
+              className="w-full h-auto object-contain rounded-2xl transition-transform duration-700 group-hover:scale-104"
+              loading="lazy"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+            />
+          )}
+          <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-cyan-500/10" />
+            <div className="absolute -inset-full animate-sweep bg-gradient-to-tr from-transparent via-white/10 to-transparent" />
+          </div>
+        </div>
+      </motion.div>
     </Reveal>
   );
 }
@@ -228,7 +302,10 @@ function PortfolioCard({ project, onClick }: { project: typeof portfolioData[num
   if (project.category === "Videography") {
     return <VideographyCard project={project} onClick={onClick} />;
   }
-  if (project.category === "Web Development" && project.previewImage) {
+  if (project.category === "Photography") {
+    return <PhotographyCard project={project} />;
+  }
+  if (project.previewImage) {
     return <WebDevCard project={project} />;
   }
   return <GenericCard project={project} />;
@@ -336,7 +413,19 @@ function Portfolio() {
             ))
           ) : (
             <div className="col-span-full text-center py-24">
-              <p className="text-muted-foreground text-lg">Projects coming soon.</p>
+              <div className="mx-auto max-w-2xl rounded-[22px] border border-border/60 bg-surface/40 px-8 py-14">
+                <div className="text-5xl mb-6">✨</div>
+                <h3 className="text-2xl font-bold mb-4">More amazing projects are coming soon.</h3>
+                <p className="text-muted-foreground mb-8">
+                  We're currently working on exciting new {active.toLowerCase()} projects that will be showcased here.
+                </p>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow"
+                >
+                  Book Your Project
+                </Link>
+              </div>
             </div>
           )}
         </div>

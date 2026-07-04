@@ -1,33 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
+import { footerNavItems } from "@/lib/navigation";
 
 const cols = [
-  {
-    title: "Studio",
-    links: [
-      { to: "/about", label: "About" },
-      { to: "/portfolio", label: "Portfolio" },
-      { to: "/case-studies", label: "Case Studies" },
-      { to: "/careers", label: "Careers" },
-    ],
-  },
-  {
-    title: "Services",
-    links: [
-      { to: "/services", label: "All Services" },
-      { to: "/pricing", label: "Pricing" },
-      { to: "/testimonials", label: "Testimonials" },
-      { to: "/blog", label: "Blog" },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { to: "/privacy", label: "Privacy Policy" },
-      { to: "/terms", label: "Terms" },
-      { to: "/contact", label: "Contact" },
-    ],
-  },
+  { title: "Studio", links: footerNavItems.studio },
+  { title: "Services", links: footerNavItems.services },
+  { title: "Legal", links: footerNavItems.legal },
 ] as const;
 
 export function Footer() {

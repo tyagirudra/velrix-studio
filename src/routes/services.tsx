@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowUpRight,
-  Code, Wrench, Search, MapPin, Gauge, Sparkles, Camera, Video,
-  Clapperboard, Share2, Workflow, Lightbulb, Bot,
+  Code, Wrench, ShoppingBag, MapPin, Gauge, Camera, Video,
+  Clapperboard, Share2, Lightbulb,
 } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { PageHero, SectionHeading, CTASection } from "@/components/sections";
-import { services, aiTools } from "@/lib/site-data";
+import { services } from "@/lib/site-data";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -27,8 +27,8 @@ export const Route = createFileRoute("/services")({
 });
 
 const iconMap = {
-  Code, Wrench, Search, MapPin, Gauge, Sparkles, Camera, Video,
-  Clapperboard, Share2, Workflow, Lightbulb,
+  Code, Wrench, ShoppingBag, MapPin, Gauge, Camera, Video,
+  Clapperboard, Share2, Lightbulb,
 } as const;
 
 function Services() {
@@ -44,7 +44,7 @@ function Services() {
         subtitle="From the first wireframe to the hundredth conversion, our integrated team covers every discipline your brand needs."
       />
 
-      <section className="px-6 py-12">
+      <section className="px-6 py-24">
         <div className="mx-auto max-w-6xl grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((service, i) => {
             const Icon = iconMap[service.icon as keyof typeof iconMap];
@@ -68,35 +68,6 @@ function Services() {
               </Reveal>
             );
           })}
-        </div>
-      </section>
-
-      <section className="px-6 py-20">
-        <div className="mx-auto max-w-6xl">
-          <SectionHeading
-            eyebrow="AI advantage"
-            title="Free AI-powered growth tools"
-            subtitle="Engage instantly with tools that surface opportunities before we even talk."
-          />
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {aiTools.map((tool, i) => (
-              <Reveal key={tool.title} delay={i % 3}>
-                <div className="group h-full rounded-3xl border border-border/60 bg-surface/40 p-7 transition-colors hover:border-accent/40">
-                  <span className="grid h-11 w-11 place-items-center rounded-xl glass text-accent">
-                    <Bot className="h-5 w-5" />
-                  </span>
-                  <h3 className="mt-4 text-lg font-semibold">{tool.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{tool.body}</p>
-                  <Link
-                    to="/contact"
-                    className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent"
-                  >
-                    Try it <ArrowUpRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              </Reveal>
-            ))}
-          </div>
         </div>
       </section>
 

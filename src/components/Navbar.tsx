@@ -3,16 +3,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { MagneticButton } from "./MagneticButton";
 import { cn } from "@/lib/utils";
-
-const links = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
-  { to: "/services", label: "Services" },
-  { to: "/portfolio", label: "Work" },
-  { to: "/pricing", label: "Pricing" },
-  { to: "/blog", label: "Blog" },
-  { to: "/contact", label: "Contact" },
-] as const;
+import { mainNavItems } from "@/lib/navigation";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -44,8 +35,8 @@ export function Navbar() {
           <span className="font-display text-lg font-bold tracking-tight">Velrix</span>
         </Link>
 
-        <ul className="hidden items-center gap-1 lg:flex">
-          {links.map((l) => {
+        <ul className="hidden items-center gap-3 lg:flex">
+          {mainNavItems.map((l) => {
             const active = pathname === l.to;
             return (
               <li key={l.to}>
@@ -84,7 +75,7 @@ export function Navbar() {
       {open && (
         <div className="absolute inset-x-4 top-20 z-50 animate-[fade-in_0.2s_ease-out] rounded-3xl glass p-4 shadow-soft lg:hidden">
           <ul className="flex flex-col gap-1">
-            {links.map((l) => (
+            {mainNavItems.map((l) => (
               <li key={l.to}>
                 <Link
                   to={l.to}

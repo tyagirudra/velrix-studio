@@ -4,18 +4,15 @@ import { motion } from "framer-motion";
 import {
   ArrowRight,
   ArrowUpRight,
-  Star,
   Code,
   Wrench,
-  Search,
+  ShoppingBag,
   MapPin,
   Gauge,
-  Sparkles,
   Camera,
   Video,
   Clapperboard,
   Share2,
-  Workflow,
   Lightbulb,
   Zap,
   Bot,
@@ -23,6 +20,8 @@ import {
   Palette,
   Users,
   TrendingUp,
+  Rocket,
+  Search,
 } from "lucide-react";
 import heroAbstract from "@/assets/hero-abstract.jpg";
 import { MagneticButton } from "@/components/MagneticButton";
@@ -39,8 +38,6 @@ import {
   stats,
   whyVelrix,
   process,
-  portfolio,
-  testimonials,
   portfolioData,
 } from "@/lib/site-data";
 
@@ -80,13 +77,23 @@ export const Route = createFileRoute("/")({
 });
 
 const iconMap = {
-  Code, Wrench, Search, MapPin, Gauge, Sparkles, Camera, Video,
-  Clapperboard, Share2, Workflow, Lightbulb,
+  Code, Wrench, ShoppingBag, MapPin, Gauge, Camera, Video,
+  Clapperboard, Share2, Lightbulb,
 } as const;
 
 const whyIcons = [Zap, Bot, ShieldCheck, Palette, Users, TrendingUp];
 
-const logos = ["Nova", "Atlas", "Lumen", "Pulse", "Vertex", "Noir", "Orbit", "Halo"];
+const expertiseItems = [
+  { name: "Web Development", icon: Code },
+  { name: "Videography", icon: Video },
+  { name: "Photography", icon: Camera },
+  { name: "Social Media Management", icon: Share2 },
+  { name: "E-Commerce Solutions", icon: ShoppingBag },
+  { name: "SEO", icon: Search },
+  { name: "Website Maintenance", icon: Wrench },
+  { name: "Video Editing", icon: Clapperboard },
+  { name: "Digital Growth", icon: Rocket },
+];
 
 function Home() {
   return (
@@ -96,10 +103,7 @@ function Home() {
       <ServicesSection />
       <WhySection />
       <ProcessSection />
-      <FeaturedWork />
       <FeaturedWebProjectsSection />
-      <WebDevPricingSection />
-      <TestimonialsSection />
       <CTASection />
     </>
   );
@@ -188,18 +192,27 @@ function TrustedSection() {
     <section className="px-6 py-16">
       <div className="mx-auto max-w-6xl">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          Industries we serve — SaaS · E-commerce · Hospitality · Finance · Fitness · Creative
+          Our Expertise
         </p>
         <div className="relative mt-8 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]">
-          <div className="flex w-max animate-marquee gap-16">
-            {[...logos, ...logos].map((logo, i) => (
-              <span
-                key={i}
-                className="font-display text-2xl font-semibold text-muted-foreground/60"
-              >
-                {logo}
-              </span>
-            ))}
+          <div className="flex w-max animate-marquee gap-12 items-center group">
+            {[...expertiseItems, ...expertiseItems].map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={i}
+                  className="flex items-center gap-4 transition-all duration-300 opacity-90 hover:opacity-100 hover:scale-105"
+                >
+                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-brand/20 text-accent">
+                    <Icon className="h-6 w-6" />
+                  </span>
+                  <span className="font-display text-2xl font-semibold text-foreground">
+                    {item.name}
+                  </span>
+                  <span className="text-cyan-400 text-2xl font-light">✦</span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -330,63 +343,7 @@ function ProcessSection() {
   );
 }
 
-const cardGradients = [
-  "from-violet-500/30 to-cyan-500/30",
-  "from-fuchsia-500/30 to-violet-500/30",
-  "from-cyan-500/30 to-blue-500/30",
-];
 
-function FeaturedWork() {
-  return (
-    <section className="px-6 py-24">
-      <div className="mx-auto max-w-6xl">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <SectionHeading
-            align="left"
-            eyebrow="Featured work"
-            title="Results we're proud of"
-          />
-          <MagneticButton to="/portfolio" variant="ghost">
-            All projects <ArrowRight className="h-4 w-4" />
-          </MagneticButton>
-        </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {portfolio.slice(0, 4).map((p, i) => (
-            <Reveal key={p.slug} delay={i % 2}>
-              <Link
-                to="/portfolio/$slug"
-                params={{ slug: p.slug }}
-                className="group block overflow-hidden rounded-3xl border border-border/60 bg-surface/40"
-              >
-                <div
-                  className={`relative aspect-[16/10] overflow-hidden bg-gradient-to-br ${cardGradients[i % 3]}`}
-                >
-                  <div className="absolute inset-0 grid place-items-center">
-                    <span className="font-display text-4xl font-bold text-foreground/80 transition-transform duration-700 group-hover:scale-110">
-                      {p.client}
-                    </span>
-                  </div>
-                  <span className="absolute right-4 top-4 rounded-full glass px-3 py-1 text-xs font-medium">
-                    {p.category}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between p-6">
-                  <div>
-                    <h3 className="text-lg font-semibold">{p.title}</h3>
-                    <p className="text-sm text-muted-foreground">{p.blurb}</p>
-                  </div>
-                  <span className="shrink-0 rounded-full bg-gradient-brand-soft px-3 py-1 text-xs font-semibold text-accent">
-                    {p.result}
-                  </span>
-                </div>
-              </Link>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 function FeaturedWebProjectsSection() {
   const [filter, setFilter] = useState("All");
@@ -532,67 +489,4 @@ function FeaturedWebProjectsSection() {
   );
 }
 
-function TestimonialsSection() {
-  return (
-    <section className="px-6 py-24">
-      <div className="mx-auto max-w-6xl">
-        <SectionHeading
-          eyebrow="Testimonials"
-          title="Loved by founders and marketing leaders"
-        />
-        <div className="mt-14 grid gap-6 md:grid-cols-2">
-          {testimonials.map((t, i) => (
-            <Reveal key={t.name} delay={i % 2}>
-              <figure className="flex h-full flex-col rounded-3xl glass p-7">
-                <div className="flex gap-1 text-accent">
-                  {Array.from({ length: t.rating }).map((_, s) => (
-                    <Star key={s} className="h-4 w-4 fill-current" />
-                  ))}
-                </div>
-                <blockquote className="mt-4 flex-1 text-lg leading-relaxed">
-                  "{t.quote}"
-                </blockquote>
-                <figcaption className="mt-6 flex items-center gap-3">
-                  <span className="grid h-11 w-11 place-items-center rounded-full bg-gradient-brand font-semibold text-primary-foreground">
-                    {t.name[0]}
-                  </span>
-                  <div>
-                    <p className="font-semibold">{t.name}</p>
-                    <p className="text-sm text-muted-foreground">{t.role}</p>
-                  </div>
-                </figcaption>
-              </figure>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
-function WebDevPricingSection() {
-  return (
-    <section className="relative px-6 py-24">
-      <BackgroundBlobs />
-      <div className="mx-auto max-w-6xl">
-        <Reveal>
-          <SectionHeading
-            eyebrow="Packages"
-            title="Website Development Packages"
-            subtitle="Choose the perfect package for your business. From startup websites to enterprise-grade solutions, we've got a plan tailored to your goals."
-          />
-        </Reveal>
-
-        <Reveal delay={1}>
-          <div className="mt-14 flex justify-center">
-            <img
-              src="/images/web-dev-pricing.png"
-              alt="Velrix Studio Website Development Pricing Packages"
-              className="w-full max-w-5xl rounded-3xl object-cover shadow-soft"
-            />
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}

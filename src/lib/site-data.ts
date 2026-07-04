@@ -12,10 +12,10 @@ export const services = [
     icon: "Wrench",
   },
   {
-    slug: "seo",
-    title: "SEO",
-    short: "Rank for the searches that actually grow revenue.",
-    icon: "Search",
+    slug: "e-commerce-solutions",
+    title: "E-Commerce Solutions",
+    short: "Complete e-commerce solutions designed to help businesses launch, manage, optimize and scale their online stores and marketplace presence across leading platforms.",
+    icon: "ShoppingBag",
   },
   {
     slug: "local-seo",
@@ -28,12 +28,6 @@ export const services = [
     title: "Technical SEO",
     short: "Core Web Vitals, crawlability and architecture, perfected.",
     icon: "Gauge",
-  },
-  {
-    slug: "branding",
-    title: "Branding",
-    short: "Identities with a point of view that command premium pricing.",
-    icon: "Sparkles",
   },
   {
     slug: "photography",
@@ -58,12 +52,6 @@ export const services = [
     title: "Social Media Management",
     short: "Always-on content engines that build audiences.",
     icon: "Share2",
-  },
-  {
-    slug: "marketing-automation",
-    title: "Marketing Automation",
-    short: "Funnels and flows that nurture and close on autopilot.",
-    icon: "Workflow",
   },
   {
     slug: "creative-strategy",
@@ -200,98 +188,63 @@ export const portfolioData = [
   },
   {
     id: "7",
-    title: "Nova Finance",
-    slug: "nova-finance",
-    category: "Web Development",
-    client: "Nova",
-    description: "A fintech platform rebuilt for trust and speed.",
-    result: "+212% signups",
-    featured: false,
+    title: "Luxury Brand Identity",
+    slug: "luxury-brand-identity",
+    category: "Branding",
+    categoryLabel: "Branding",
+    description: "Complete visual identity system crafted for a premium modern business.",
+    previewImage: "/branding1.JPG",
+    featured: true,
     isPublished: true,
     displayOrder: 7,
-    tags: ["Fintech", "Finance"],
+    tags: ["Branding", "Identity", "Luxury"],
   },
   {
     id: "8",
-    title: "Atlas Coffee",
-    slug: "atlas-coffee",
+    title: "Corporate Brand System",
+    slug: "corporate-brand-system",
     category: "Branding",
-    client: "Atlas",
-    description: "A specialty roaster's premium rebrand.",
-    result: "3x avg. order value",
-    featured: false,
+    categoryLabel: "Branding",
+    description: "Professional branding package designed to create a memorable business presence.",
+    previewImage: "/branding2.JPEG",
+    featured: true,
     isPublished: true,
     displayOrder: 8,
-    tags: ["Coffee", "Branding"],
+    tags: ["Branding", "Corporate", "Identity"],
   },
   {
     id: "9",
-    title: "Lumen Studio",
-    slug: "lumen-studio",
+    title: "Photography 1",
+    slug: "photography-1",
     category: "Photography",
-    client: "Lumen",
-    description: "Editorial product photography campaign.",
-    result: "+48% conversion",
-    featured: false,
+    previewImage: "/photography1.png",
+    featured: true,
     isPublished: true,
     displayOrder: 9,
-    tags: ["Photography", "Product"],
+    tags: ["Photography"],
   },
   {
     id: "10",
-    title: "Pulse Fitness",
-    slug: "pulse-fitness",
-    category: "Marketing",
-    client: "Pulse",
-    description: "A growth engine for a boutique gym chain.",
-    result: "5x qualified leads",
-    featured: false,
+    title: "Photography 2",
+    slug: "photography-2",
+    category: "Photography",
+    previewImage: "/photography2.png",
+    featured: true,
     isPublished: true,
     displayOrder: 10,
-    tags: ["Marketing", "Fitness"],
+    tags: ["Photography"],
   },
   {
     id: "11",
-    title: "Vertex SaaS",
-    slug: "vertex-saas",
-    category: "SEO",
-    client: "Vertex",
-    description: "Organic dominance in a crowded category.",
-    result: "#1 for 40 keywords",
-    featured: false,
+    title: "Photography 3",
+    slug: "photography-3",
+    category: "Photography",
+    previewImage: "/photography3.png",
+    featured: true,
     isPublished: true,
     displayOrder: 11,
-    tags: ["SEO", "SaaS"],
+    tags: ["Photography"],
   },
-  {
-    id: "12",
-    title: "Noir Films",
-    slug: "noir-films",
-    category: "Videography",
-    client: "Noir",
-    description: "A cinematic brand film series.",
-    result: "2.1M views",
-    featured: false,
-    isPublished: true,
-    displayOrder: 12,
-    tags: ["Videography", "Films"],
-  },
-];
-
-export const portfolio: {
-  slug: string;
-  title: string;
-  client: string;
-  category: Category;
-  blurb: string;
-  result: string;
-}[] = [
-  { slug: "nova-finance", title: "Nova Finance", client: "Nova", category: "Web Development", blurb: "A fintech platform rebuilt for trust and speed.", result: "+212% signups" },
-  { slug: "atlas-coffee", title: "Atlas Coffee", client: "Atlas", category: "Branding", blurb: "A specialty roaster's premium rebrand.", result: "3x avg. order value" },
-  { slug: "lumen-studio", title: "Lumen Studio", client: "Lumen", category: "Photography", blurb: "Editorial product photography campaign.", result: "+48% conversion" },
-  { slug: "pulse-fitness", title: "Pulse Fitness", client: "Pulse", category: "Marketing", blurb: "A growth engine for a boutique gym chain.", result: "5x qualified leads" },
-  { slug: "vertex-saas", title: "Vertex SaaS", client: "Vertex", category: "SEO", blurb: "Organic dominance in a crowded category.", result: "#1 for 40 keywords" },
-  { slug: "noir-films", title: "Noir Films", client: "Noir", category: "Videography", blurb: "A cinematic brand film series.", result: "2.1M views" },
 ];
 
 export const testimonials = [
@@ -313,7 +266,7 @@ export const pricing = [
     name: "Professional",
     price: "₹30,000",
     tagline: "For growing brands ready to convert seriously.",
-    features: ["Up to 12 custom pages", "Brand & design system", "Advanced SEO + analytics", "CMS + blog", "Marketing automation", "Priority support"],
+    features: ["Up to 12 custom pages", "Brand & design system", "Advanced SEO + analytics", "CMS", "Marketing automation", "Priority support"],
     highlight: true,
   },
   {
@@ -346,12 +299,6 @@ export const faqs = [
   { q: "What is your pricing model?", a: "Fixed-scope project pricing with optional monthly retainers. No surprise invoices, ever." },
 ];
 
-export const aiTools = [
-  { title: "AI Website Audit", body: "Instant, actionable scorecard for design, speed and UX." },
-  { title: "AI SEO Analyzer", body: "Spot ranking gaps and quick wins in seconds." },
-  { title: "AI Content Generator", body: "On-brand copy drafts for pages, posts and ads." },
-  { title: "AI Marketing Strategy", body: "A tailored growth playbook from a few inputs." },
-  { title: "AI Landing Page Review", body: "Conversion critique with prioritised fixes." },
-] as const;
+
 
 
